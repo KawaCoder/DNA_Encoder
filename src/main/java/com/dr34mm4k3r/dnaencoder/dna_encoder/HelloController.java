@@ -43,11 +43,16 @@ public class HelloController {
 
         }*/
     public static void choixFichier(String indicator){
+        FileChooser f = new FileChooser();
+        File selectedFile = f.showOpenDialog(null);
+        System.out.println(selectedFile.getAbsolutePath());
+
 
         if (Objects.equals(indicator, "encode")) {
-            FileChooser f = new FileChooser();
-            File selectedFile = f.showOpenDialog(null);
-            System.out.println(selectedFile.getAbsolutePath());
+
+        }else{
+
+
         }
 
 
