@@ -15,6 +15,7 @@ import javax.swing.*;
 import java.io.*;
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.StringJoiner;
 
 
@@ -81,35 +82,53 @@ public class HelloController {
 
 
 
-            try
-            {
-                String ENDL = System.getProperty("line.separator");
 
-                StringBuilder sb = new StringBuilder();
+            FileReader inputStream = null;
+            FileWriter outputStream = null;
 
-                BufferedReader br = new BufferedReader(new FileReader("temp.txt"));
-                String ln;
-                while((ln = br.readLine()) != null)
-                {
-                    sb.append(ln
-                            .replace(" 1", "01")/*
-                            .replace("00", "at")
-                            .replace("01", "ta")
-                            .replace("10", "cg")
-                            .replace("11", "gc")*/
-                    ).append(ENDL);
+            try {
+                inputStream = new FileReader("xanadu.txt");
+                outputStream = new FileWriter("characteroutput.txt");
+
+                int c;
+                int i = 0;
+                StringBuilder tempchars = new StringBuilder();
+
+
+                while ((c = inputStream.read()) != -1) {
+
+                    tempchars.append(c);
+
+                    if (i%2==0) {
+                        tempchars = new StringBuilder("");
+                    }else {
+
+                        if (Objects.equals(String.valueOf(tempchars), "00")) {
+                            outputStream.write("at");
+
+                        } else if (Objects.equals(String.valueOf(tempchars), "01")) {
+                            outputStream.write("ta");
+
+                        } else if (Objects.equals(String.valueOf(tempchars), "10")) {
+                            outputStream.write("cg");
+
+                        } else if (Objects.equals(String.valueOf(tempchars), "11")) {
+                            outputStream.write("gc");
+
+                        }
+
+                        System.out.println(tempchars);
+                        i++;
+                    }
                 }
-                br.close();
-
-                BufferedWriter bw = new BufferedWriter(new FileWriter(String.valueOf("fini.txt")));
-                bw.write(sb.toString());
-                bw.close();
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
             }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
 
 
 
