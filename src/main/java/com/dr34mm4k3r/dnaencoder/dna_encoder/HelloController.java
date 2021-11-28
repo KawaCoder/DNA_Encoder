@@ -71,7 +71,7 @@ public class HelloController {
 
             // (File)OutputStream for writing binary code(2)
 
-            OutputStream outputData = new FileOutputStream("taemp.txt");
+            OutputStream outputData = new FileOutputStream("teamp.txt");
             outputData.write(binaryData.toString().getBytes());
 
             // [IMPORTANT] Close all the streams
@@ -88,7 +88,7 @@ public class HelloController {
 
             try {
                 inputStream = new FileReader("temp.txt");
-                outputStream = new FileWriter("characteroutput.txt");
+                outputStream = new FileWriter("EncodedFile.dna");
 
                 int c;
                 int i = 1;
@@ -97,26 +97,24 @@ public class HelloController {
 
                 while ((c = inputStream.read()) != -1) {
 
-                    tempchars.append(c);
+                    tempchars.append((char) c);
 
                     if (i%2==0)  {
-                        System.out.println("adca");
 
                         if (Objects.equals(String.valueOf(tempchars), "00")) {
                             outputStream.write("at");
-                            System.out.println("00 --> at");
 
-                        } else if (Objects.equals(String.valueOf(tempchars), "01") || Objects.equals(String.valueOf(tempchars), " 1")) {
+                        } else if (Objects.equals(String.valueOf(tempchars), "01")) {
                             outputStream.write("ta");
-                            System.out.println("01 ou ' 1' --> ta");
+
+                        } else if (Objects.equals(String.valueOf(tempchars), " 1")) {
+                            outputStream.write(" ta");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "10")) {
                             outputStream.write("cg");
-                            System.out.println("10 --> cg");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "11")) {
                             outputStream.write("gc");
-                            System.out.println("11 --> gc");
 
                         }
 
@@ -139,6 +137,59 @@ public class HelloController {
 
         }else{
             // DECODE
+
+            FileReader inputStream = null;
+            FileWriter outputStream = null;
+
+            try {
+                inputStream = new FileReader("temp.txt");
+                outputStream = new FileWriter("characteroutput.txt");
+
+                int c;
+                int i = 1;
+                StringBuilder tempchars = new StringBuilder();
+
+
+                while ((c = inputStream.read()) != -1) {
+
+                    tempchars.append((char) c);
+
+                    if (i%2==0)  {
+
+
+                        if (Objects.equals(String.valueOf(tempchars), "at")) {
+                            outputStream.write("00");
+
+                        } else if (Objects.equals(String.valueOf(tempchars), "ta")) {
+                            outputStream.write("01");
+
+                        } else if (Objects.equals(String.valueOf(tempchars), " ta")) {
+                            outputStream.write(" 01");
+
+                        } else if (Objects.equals(String.valueOf(tempchars), "cg")) {
+                            outputStream.write("10");
+
+                        } else if (Objects.equals(String.valueOf(tempchars), "gc")) {
+                            outputStream.write("1");
+
+                        }
+
+                        tempchars = new StringBuilder("");
+                    }
+
+                    i++;
+                }
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+
+
+
 
             // -->>Just reverse the process
 
