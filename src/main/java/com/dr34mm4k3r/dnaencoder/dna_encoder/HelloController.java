@@ -87,11 +87,11 @@ public class HelloController {
             FileWriter outputStream = null;
 
             try {
-                inputStream = new FileReader("xanadu.txt");
+                inputStream = new FileReader("temp.txt");
                 outputStream = new FileWriter("characteroutput.txt");
 
                 int c;
-                int i = 0;
+                int i = 1;
                 StringBuilder tempchars = new StringBuilder();
 
 
@@ -99,27 +99,31 @@ public class HelloController {
 
                     tempchars.append(c);
 
-                    if (i%2==0) {
-                        tempchars = new StringBuilder("");
-                    }else {
+                    if (i%2==0)  {
+                        System.out.println("adca");
 
                         if (Objects.equals(String.valueOf(tempchars), "00")) {
                             outputStream.write("at");
+                            System.out.println("00 --> at");
 
-                        } else if (Objects.equals(String.valueOf(tempchars), "01")) {
+                        } else if (Objects.equals(String.valueOf(tempchars), "01") || Objects.equals(String.valueOf(tempchars), " 1")) {
                             outputStream.write("ta");
+                            System.out.println("01 ou ' 1' --> ta");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "10")) {
                             outputStream.write("cg");
+                            System.out.println("10 --> cg");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "11")) {
                             outputStream.write("gc");
+                            System.out.println("11 --> gc");
 
                         }
 
-                        System.out.println(tempchars);
-                        i++;
+                        tempchars = new StringBuilder("");
                     }
+
+                    i++;
                 }
             } finally {
                 if (inputStream != null) {
