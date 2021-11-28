@@ -8,17 +8,14 @@
 package com.dr34mm4k3r.dnaencoder.dna_encoder;
 
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.File;
+import java.io.*;
+import java.math.BigInteger;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 
 public class HelloController {
@@ -42,18 +39,116 @@ public class HelloController {
                 //return(filename);
 
         }*/
-    public static void choixFichier(String indicator){
+    public static void choixFichier(String indicator) throws IOException {
         FileChooser f = new FileChooser();
         File selectedFile = f.showOpenDialog(null);
+        String filepath = selectedFile.getAbsolutePath();
         System.out.println(selectedFile.getAbsolutePath());
+
+
 
 
         if (Objects.equals(indicator, "encode")) {
 
+            // from: https://stackoverflow.com/a/65344795:
+
+            // Read all the bytes from the input file
+
+            InputStream inputData = new FileInputStream(filepath);
+            ByteArrayOutputStream fileData = new ByteArrayOutputStream();
+            inputData.transferTo(fileData);
+
+            // StringJoiner to store binary code(2) encoded
+
+            StringJoiner binaryData = new StringJoiner(" ");
+
+            // Convert every byte into binaryString
+
+            for(Byte data : fileData.toByteArray()) {
+                binaryData.add(Integer.toBinaryString(data));
+            }
+
+            // (File)OutputStream for writing binary code(2)
+
+            OutputStream outputData = new FileOutputStream("taemp.txt");
+            outputData.write(binaryData.toString().getBytes());
+
+            // [IMPORTANT] Close all the streams
+
+            fileData.close();
+            outputData.close();
+            inputData.close();
+
+
+
+            try
+            {
+                String ENDL = System.getProperty("line.separator");
+
+                StringBuilder sb = new StringBuilder();
+
+                BufferedReader br = new BufferedReader(new FileReader("temp.txt"));
+                String ln;
+                while((ln = br.readLine()) != null)
+                {
+                    sb.append(ln
+                            .replace(" 1", "01")/*
+                            .replace("00", "at")
+                            .replace("01", "ta")
+                            .replace("10", "cg")
+                            .replace("11", "gc")*/
+                    ).append(ENDL);
+                }
+                br.close();
+
+                BufferedWriter bw = new BufferedWriter(new FileWriter(String.valueOf("fini.txt")));
+                bw.write(sb.toString());
+                bw.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+
+
+
+
         }else{
+            // DECODE
 
+            // -->>Just reverse the process
 
+            // Read all the bytes from the input (binary code(2)) file to string
+
+            InputStream inputData = new FileInputStream(filepath);
+            ByteArrayOutputStream fileData = new ByteArrayOutputStream();
+            inputData.transferTo(fileData);
+
+            // ByteArrayOutputStream to store bytes decoded
+
+            ByteArrayOutputStream originalBytes = new ByteArrayOutputStream();
+
+            // Convert every binary code(2) to original byte(s)
+
+            for(String data : new String(fileData.toByteArray()).split(" ")) {
+                originalBytes.write(new BigInteger(data, 2).toByteArray());
+            }
+
+            // (File)OutputStream for writing decoded bytes
+
+            OutputStream outputData = new FileOutputStream("Decodedfile.txt");
+            outputData.write(originalBytes.toByteArray());
+
+            // [IMPORTANT] Close all the streams
+
+            inputData.close();
+            fileData.close();
+            originalBytes.close();
+            outputData.close();
         }
+
+
 
 
     }
@@ -72,13 +167,13 @@ public class HelloController {
 
 
     @FXML
-    protected void encodeAction() {
+    protected void encodeAction() throws IOException {
         System.out.println("encode");
         choixFichier("encode");
 
     }
     @FXML
-    protected void decodeAction() {
+    protected void decodeAction() throws IOException {
         System.out.println("decode");
         choixFichier("decode");
     }
