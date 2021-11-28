@@ -71,7 +71,7 @@ public class HelloController {
 
             // (File)OutputStream for writing binary code(2)
 
-            OutputStream outputData = new FileOutputStream("teamp.txt");
+            OutputStream outputData = new FileOutputStream("temp.txt");
             outputData.write(binaryData.toString().getBytes());
 
             // [IMPORTANT] Close all the streams
@@ -98,23 +98,34 @@ public class HelloController {
                 while ((c = inputStream.read()) != -1) {
 
                     tempchars.append((char) c);
+                    System.out.println(tempchars);
 
-                    if (i%2==0)  {
+                    if (Objects.equals(String.valueOf(tempchars), " ")) {
+                        outputStream.write("ga");
+                        System.out.println("' ' --> ga");
+
+                    }else if (i%2==0)  {
 
                         if (Objects.equals(String.valueOf(tempchars), "00")) {
                             outputStream.write("at");
+                            System.out.println("00 --> at");
+
 
                         } else if (Objects.equals(String.valueOf(tempchars), "01")) {
                             outputStream.write("ta");
+                            System.out.println("01 --> ta");
 
-                        } else if (Objects.equals(String.valueOf(tempchars), " 1")) {
-                            outputStream.write(" ta");
+                        } else if (Objects.equals(String.valueOf(tempchars), " ")) {
+                            outputStream.write("ga");
+                            System.out.println("' ' --> ga");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "10")) {
                             outputStream.write("cg");
+                            System.out.println("10 --> cg");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "11")) {
                             outputStream.write("gc");
+                            System.out.println("11 --> gc");
 
                         }
 
@@ -142,8 +153,8 @@ public class HelloController {
             FileWriter outputStream = null;
 
             try {
-                inputStream = new FileReader("temp.txt");
-                outputStream = new FileWriter("characteroutput.txt");
+                inputStream = new FileReader(filepath);
+                outputStream = new FileWriter("temp.txt");
 
                 int c;
                 int i = 1;
@@ -159,18 +170,24 @@ public class HelloController {
 
                         if (Objects.equals(String.valueOf(tempchars), "at")) {
                             outputStream.write("00");
+                            System.out.println("00 --> at");
+
 
                         } else if (Objects.equals(String.valueOf(tempchars), "ta")) {
                             outputStream.write("01");
+                            System.out.println("01 --> ta");
 
-                        } else if (Objects.equals(String.valueOf(tempchars), " ta")) {
-                            outputStream.write(" 01");
+                        } else if (Objects.equals(String.valueOf(tempchars), "ga")) {
+                            outputStream.write(" ");
+                            System.out.println("' ' --> ga");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "cg")) {
                             outputStream.write("10");
+                            System.out.println("10 --> cg");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "gc")) {
-                            outputStream.write("1");
+                            outputStream.write("11");
+                            System.out.println("11 --> gc");
 
                         }
 
@@ -195,7 +212,7 @@ public class HelloController {
 
             // Read all the bytes from the input (binary code(2)) file to string
 
-            InputStream inputData = new FileInputStream(filepath);
+            InputStream inputData = new FileInputStream("temp.txt");
             ByteArrayOutputStream fileData = new ByteArrayOutputStream();
             inputData.transferTo(fileData);
 
