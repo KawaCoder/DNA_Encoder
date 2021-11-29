@@ -14,6 +14,7 @@ import javafx.stage.FileChooser;
 import javax.swing.*;
 import java.io.*;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.StringJoiner;
@@ -87,8 +88,88 @@ public class HelloController {
             FileWriter outputStream = null;
 
             try {
+
+
+
+                ArrayList<String> words = new ArrayList<>();
+                try (Scanner s = new Scanner(new File("temp.txt")).useDelimiter("\\s* \\s*")) {
+                    // \\s* in regular expressions means "any number or whitespaces".
+                    // We could've said simply useDelimiter("-") and Scanner would have
+                    // included the whitespaces as part of the data it extracted.
+                    while (s.hasNext()) {
+                        words.add(s.next());
+                    }
+                }
+                catch (FileNotFoundException e) {
+                    // Handle the potential exception
+                }
+
+
+                FileWriter addSpaceToTemp= new FileWriter("temp.txt");
+
+                for (int ii = 0;ii<words.size();ii++){
+                    if (words.get(ii).length()==6){
+                        System.out.println(words.get(ii)+" --> "+"0" + words.get(ii));
+                        words.set(ii, ("0" + words.get(ii)));
+
+
+                    }
+                    System.out.print(words.get(ii) + " ");
+                    addSpaceToTemp.write(ii);
+                }
+
+                addSpaceToTemp.close();
+
+
                 inputStream = new FileReader("temp.txt");
                 outputStream = new FileWriter("EncodedFile.dna");
+
+
+                int c;
+                int i = 1;
+                StringBuilder tempchars = new StringBuilder();
+
+                for (String word : words) {
+                    for (int jj = 0; jj < 7; jj++) {
+                        tempchars.append(word.charAt(jj));
+                        //System.out.println(tempchars);
+
+                        if (Objects.equals(String.valueOf(tempchars), " ")) {
+                            outputStream.write("aaa");
+                            //System.out.println("' ' --> aaa");
+                            tempchars = new StringBuilder();
+                        }else if (i%2==0)  {
+
+                            if (Objects.equals(String.valueOf(tempchars), "00")) {
+                                outputStream.write("at");
+                                // System.out.println("00 --> at");
+
+
+                            } else if (Objects.equals(String.valueOf(tempchars), "01")) {
+                                outputStream.write("ta");
+                                // System.out.println("01 --> ta");
+
+                            } else if (Objects.equals(String.valueOf(tempchars), "10")) {
+                                outputStream.write("cg");
+                                // System.out.println("10 --> cg");
+
+                            } else if (Objects.equals(String.valueOf(tempchars), "11")) {
+                                outputStream.write("gc");
+                                //  System.out.println("11 --> gc");
+
+                            }
+                            tempchars = new StringBuilder();
+
+                        }
+
+                        i++;
+
+                    }
+
+
+                }
+
+
 
                 int c;
                 int i = 1;
@@ -98,38 +179,34 @@ public class HelloController {
                 while ((c = inputStream.read()) != -1) {
 
                     tempchars.append((char) c);
-                    System.out.println(tempchars);
+                    //System.out.println(tempchars);
 
                     if (Objects.equals(String.valueOf(tempchars), " ")) {
-                        outputStream.write("ga");
-                        System.out.println("' ' --> ga");
-
+                        outputStream.write("aaa");
+                        //System.out.println("' ' --> aaa");
+                        tempchars = new StringBuilder();
                     }else if (i%2==0)  {
 
                         if (Objects.equals(String.valueOf(tempchars), "00")) {
                             outputStream.write("at");
-                            System.out.println("00 --> at");
+                           // System.out.println("00 --> at");
 
 
                         } else if (Objects.equals(String.valueOf(tempchars), "01")) {
                             outputStream.write("ta");
-                            System.out.println("01 --> ta");
-
-                        } else if (Objects.equals(String.valueOf(tempchars), " ")) {
-                            outputStream.write("ga");
-                            System.out.println("' ' --> ga");
+                           // System.out.println("01 --> ta");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "10")) {
                             outputStream.write("cg");
-                            System.out.println("10 --> cg");
+                           // System.out.println("10 --> cg");
 
                         } else if (Objects.equals(String.valueOf(tempchars), "11")) {
                             outputStream.write("gc");
-                            System.out.println("11 --> gc");
+                          //  System.out.println("11 --> gc");
 
                         }
+                        tempchars = new StringBuilder();
 
-                        tempchars = new StringBuilder("");
                     }
 
                     i++;
