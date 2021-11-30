@@ -72,7 +72,7 @@ public class HelloController {
 
             // (File)OutputStream for writing binary code(2)
 
-            OutputStream outputData = new FileOutputStream("encodagebinaire.txt");
+            OutputStream outputData = new FileOutputStream("temp.txt");
             outputData.write(binaryData.toString().getBytes());
 
             // [IMPORTANT] Close all the streams
@@ -90,7 +90,7 @@ public class HelloController {
 
 
                 ArrayList<String> words = new ArrayList<>();
-                try (Scanner s = new Scanner(new File("encodagebinaire.txt")).useDelimiter("\\s* \\s*")) {
+                try (Scanner s = new Scanner(new File("temp.txt")).useDelimiter("\\s* \\s*")) {
                     // \\s* in regular expressions means "any number or whitespaces".
                     // We could've said simply useDelimiter("-") and Scanner would have
                     // included the whitespaces as part of the data it extracted.
@@ -103,7 +103,7 @@ public class HelloController {
                 }
 
 
-                addZeroToTemp = new FileWriter("binaireaveczeros.txt");
+                addZeroToTemp = new FileWriter("temp.txt");
 
                 for (int ii = 0;ii<words.size();ii++){
                     if (words.get(ii).length()==7){
@@ -239,7 +239,7 @@ public class HelloController {
 
             try {
                 inputStream = new FileReader(filepath);
-                outputStream = new FileWriter("adnversbinaire.txt");
+                outputStream = new FileWriter("temp.txt");
 
 
 
@@ -287,7 +287,7 @@ public class HelloController {
                 outputStream.close();
 
                 ArrayList<String> words = new ArrayList<>();
-                try (Scanner s = new Scanner(new File("adnversbinaire.txt")).useDelimiter("\\s* \\s*")) {
+                try (Scanner s = new Scanner(new File("temp.txt")).useDelimiter("\\s* \\s*")) {
                     // \\s* in regular expressions means "any number or whitespaces".
                     // We could've said simply useDelimiter("-") and Scanner would have
                     // included the whitespaces as part of the data it extracted.
@@ -300,7 +300,7 @@ public class HelloController {
                 }
 
 
-                removeZeroFromTemp= new FileWriter("binairesanszero.txt");
+                removeZeroFromTemp= new FileWriter("temp.txt");
 
                 for (int ii = 0;ii<words.size();ii++){
                     if (words.get(ii).length()==8){
@@ -336,7 +336,7 @@ public class HelloController {
 
             // Read all the bytes from the input (binary code(2)) file to string
 
-            InputStream inputData = new FileInputStream("binairesanszero.txt");
+            InputStream inputData = new FileInputStream("temp.txt");
             ByteArrayOutputStream fileData = new ByteArrayOutputStream();
             inputData.transferTo(fileData);
 
